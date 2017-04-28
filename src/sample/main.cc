@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include "../net/pack_base.h"
 
-void main(int argc, char const *argv[])
+int main(int argc, char **argv)
 {
 	/* code */
+    printf("hello world, %ld" , sizeof(czu::PackBase));
 	return 0;
 }
+
