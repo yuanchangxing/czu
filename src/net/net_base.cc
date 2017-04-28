@@ -21,16 +21,6 @@
 
 using namespace std;
 
-//NetBase * _obj;
-
-
-
-//void NetBase::set_callbackobj( ){
-
-//    _obj = this;
-
-//}
-
 
 
 void NetBase::close_cb(  int listenfd, int sockfd, struct epoll_event &ev){
