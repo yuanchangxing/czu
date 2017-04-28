@@ -33,7 +33,7 @@ public:
 };
 
 
-class NetBase :public PduUtil
+class NetBase :public PduUtil, private NetBufferReader
 {
 public:
 
