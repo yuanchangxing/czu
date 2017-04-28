@@ -77,7 +77,6 @@ protected:
     void set_reuse(int _sock);
     bool bind_socket(int _sock,char *_pAddr, int _port);
     void set_nonblocking(int _sock);
-//    void set_callbackobj();
 
     void close_cb( int _listenfd, int _sockfd, struct epoll_event &_ev);
 
@@ -85,7 +84,7 @@ protected:
     void SetSignalHandle();
 
 protected:
-    
+
     int listen_num_;        //监听的SOCKET数量
     std::string ip_ ;
     int port_;          //服务端监听端口
