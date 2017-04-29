@@ -53,6 +53,19 @@ namespace czu{
 
         virtual int OnSerializePack(PackBase& _data, char *_buffer_ptr){
 
+            int total_len = PackBase::pack_head_length_ + _data.length_ ;
+            _buffer_ptr = (char*)malloc(total_len* sizeof(char));
+            char *ptr = _buffer_ptr ;
+            write_int32(ptr, _data.headflag_);
+            write_int32(ptr,_data.cmd_);
+            write_int32(ptr,_data.sequence_);
+            write_int32(ptr,_data.userid_);
+            write_int32(ptr,_data.reserved_);
+            write_int32(ptr,_data.length_);
+            write_array(ptr,_data.body.get(), _data.length_);
+
+
+            return total_len;
         }
 
     };

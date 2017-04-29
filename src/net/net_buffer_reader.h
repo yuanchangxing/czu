@@ -4,6 +4,8 @@
 
 #include <zconf.h>
 #include <arpa/inet.h>
+#include <string.h>
+
 
 namespace czu {
 
@@ -24,7 +26,9 @@ namespace czu {
         }
 
 		inline void write_int32(char *_ptr, int _value) {
-
+            int bigendian_value = htonl(_value);
+            memcpy(_ptr, (char*)(&(bigendian_value)), sizeof(int));
+            _ptr += sizeof(int);
 		}
 
 		/*
@@ -54,8 +58,9 @@ namespace czu {
 
 		}
 
-		inline void write_array(char *_ptr, const char *_value) {
-
+		inline void write_array(char *_ptr, const char *_value, const int _length) {
+			memcpy(_ptr, _value, _length );
+            _ptr+= _length;
 		}
 
 
