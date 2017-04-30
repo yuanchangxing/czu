@@ -19,13 +19,13 @@ namespace czu {
 		/*
          * int 32 operator.
          */
-		inline int read_int32(char *_ptr) {
+		inline int read_int32(char *&_ptr) {
             int val = ntohl(uint32_t( *((int*)_ptr)));
-            _ptr += sizeof(int) ;
+			_ptr += sizeof(int) ;
             return val;
         }
 
-		inline void write_int32(char *_ptr, int _value) {
+		inline void write_int32(char *&_ptr, int _value) {
             int bigendian_value = htonl(_value);
             memcpy(_ptr, (char*)(&(bigendian_value)), sizeof(int));
             _ptr += sizeof(int);
@@ -34,7 +34,7 @@ namespace czu {
 		/*
          *int 16 operator
          */
-		inline int read_int16(char *_ptr) {
+		inline int read_int16(char *&_ptr) {
 
 		}
 
@@ -54,11 +54,11 @@ namespace czu {
 		}
 
 
-		inline char *read_array(char *_ptr, int _length) {
+		inline char *read_array(char *&_ptr, int _length) {
 
 		}
 
-		inline void write_array(char *_ptr, const char *_value, const int _length) {
+		inline void write_array(char *&_ptr, const char *_value, const int _length) {
 			memcpy(_ptr, _value, _length );
             _ptr+= _length;
 		}

@@ -54,13 +54,13 @@ namespace czu {
 
         int start_server(std::string _ip, short _port = default_port);
 
-        bool send(int _fd, PackBase &_data);
+        bool send_pack(int _fd, PackBase &_data);
 
-        bool send(int _fd, const char *_buff, int _len);
+        bool send_buffer(int _fd, const char *_buff, int _len);
 
         virtual void OnSendFailed(int _fd, PackBase &_data) {
             //TODO
-            printf("failed fd:%d\n", _fd);
+            LOGE("OnSendFailed fd:%d\n", _fd);
         }
 
         void close_connect(int _sockfd);
@@ -88,7 +88,7 @@ namespace czu {
 
         void close_cb(int _listenfd, int _sockfd, struct epoll_event &_ev);
 
-        int read_cb(int _listenfd, int _sockfd, struct epoll_event &_ev);
+        int read_cb(  int _sockfd, struct epoll_event &_ev);
 
     protected:
 

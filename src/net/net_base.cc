@@ -1,4 +1,6 @@
 
+
+#include "clog.h"
 #include "net_base.h"
 #include <errno.h>
 #include <signal.h>
@@ -25,23 +27,24 @@ namespace czu {
 
 
     void NetBase::close_cb(int listenfd, int sockfd, struct epoll_event &ev) {
+        LOGD("close_cb") ;
         close(sockfd);
         recv_buffers_.erase(sockfd);
         OnDisconn(sockfd);
     }
 
-    int NetBase::read_cb(int listenfd, int sockfd, struct epoll_event &ev) {
+    int NetBase::read_cb( int sock_fd, struct epoll_event &ev) {
 
         bool needs_close = false;
         char sbuf[1024] = {0};
         char *buf = sbuf;
         while (true) {
 
-            int val = (int)read(sockfd, buf, 1024);
+            int val = (int)read(sock_fd, buf, 1024);
             if (val > 0) {
 
                 PackBase pdu;
-                std::unordered_map<int, ConnectBuffer>::iterator it = recv_buffers_.find(sockfd);
+                std::unordered_map<int, ConnectBuffer>::iterator it = recv_buffers_.find(sock_fd);
 
                 if (recv_buffers_.end() != it) {
 
@@ -60,19 +63,19 @@ namespace czu {
                     ConnectBuffer connect_buffer;
                     connect_buffer.body = newbuf;
                     connect_buffer.length = val;
-                    recv_buffers_[sockfd] = connect_buffer;
-                    it = recv_buffers_.find(sockfd);
+                    recv_buffers_[sock_fd] = connect_buffer;
+                    it = recv_buffers_.find(sock_fd);
                 }
                 buf = sbuf;
 
                 int result = 0;
                 while ((result = OnParsePack(it->second.body.get(), it->second.length, pdu)) != 0) {
                     if (result < 0) {
-                        recv_buffers_.erase(sockfd);
-                        if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sockfd, &ev) == -1) {
+                        recv_buffers_.erase(sock_fd);
+                        if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sock_fd, &ev) == -1) {
                             exit(-1);
                         }
-                        close_cb(listenfd, sockfd, ev);
+                        close_cb(socket_listenfd_, sock_fd, ev);
 
                         needs_close = true;
                         return -1;
@@ -80,25 +83,26 @@ namespace czu {
                         memmove(it->second.body.get(), it->second.body.get() + result, it->second.length - result);
                         it->second.length -= result;
                         val -= result;
-                        OnRecv(sockfd, pdu);
-                        printf("=============>onrecv");
+                        OnRecv(sock_fd, pdu);
                     }
                 }
             } else if (val == 0) {
-                if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sockfd, &ev) == -1) {
+                if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sock_fd, &ev) == -1) {
                     exit(-2);
                 }
-                close_cb(listenfd, sockfd, ev);
+                close_cb(socket_listenfd_, sock_fd, ev);
                 return -2;
             } else if (val < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+                LOGI("error is %d; val is %d",errno, val);
                 break;
             } else if (errno == EBADF) {
-                if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sockfd, &ev) == -1) {
+                if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sock_fd, &ev) == -1) {
                     exit(-2);
                 }
-                close_cb(listenfd, sockfd, ev);
+                close_cb(socket_listenfd_, sock_fd, ev);
                 return -3;
             } else {
+                LOGD("else run");
                 break;
             }
         }
@@ -196,23 +200,24 @@ namespace czu {
         listen_socket(this->socket_listenfd_, SOMAXCONN * 1000);
 
         while (true) {
-            struct sockaddr_in clientaddr;
+            struct sockaddr_in client_addr;
             socklen_t clilen = sizeof(sockaddr_in);
             int fds = epoll_wait(this->epollfd_, events_,
                                  SOMAXCONN, 10);
 
             for (int i = 0; i < fds; i++) {
+                LOGD("poll loop; events_[i].data.fd:%d; %d",events_[i].data.fd, socket_listenfd_);
                 if (events_[i].data.fd == this->socket_listenfd_) {
                     int connfd = accept(this->socket_listenfd_,
-                                        (struct sockaddr *) &clientaddr,
+                                        (struct sockaddr *) &client_addr,
                                         &clilen);
                     if (connfd < 0) {
                         exit(-2);
                     }
                     set_nonblocking(connfd);
 
-                    char *ip = inet_ntoa(clientaddr.sin_addr);
-                    short port = ntohs(clientaddr.sin_port);
+                    char *ip = inet_ntoa(client_addr.sin_addr);
+                    short port = ntohs(client_addr.sin_port);
                     ev.data.fd = connfd;
                     ev.events = EPOLLIN | EPOLLET;
                     if (epoll_ctl(this->epollfd_, EPOLL_CTL_ADD,
@@ -237,8 +242,7 @@ namespace czu {
                              events_[i].data.fd, events_[i]);
                 } else if (events_[i].events & EPOLLIN ||
                            events_[i].events & EPOLLPRI) {
-                    int result = read_cb(this->socket_listenfd_,
-                                         events_[i].data.fd, events_[i]);
+                    int result = read_cb(events_[i].data.fd, events_[i]);
                     if (!result) {
                         events_[i].events = EPOLLOUT | EPOLLET |
                                             EPOLLPRI | EPOLLIN;
@@ -288,15 +292,16 @@ namespace czu {
     }
 
 
-    bool NetBase::send(int _fd, PackBase &_data) {
+    bool NetBase::send_pack(int _fd, PackBase &_data) {
         std::lock_guard<std::mutex> lk1(send_mutex_);
         char *buf = NULL;
         int len = OnSerializePack(_data, buf);
         if (len > 0) {
-//        int ret = send(_fd, buf, len, MSG_NOSIGNAL );
-            int ret = write(_fd, buf, len);
+            int ret = (int)send(_fd, buf, len, MSG_NOSIGNAL );
+//            int ret = write(_fd, buf, len);
             if (ret == -1) {
                 char *mesg = strerror(errno);
+                LOGE("SEND ERROR;%s", mesg);
                 OnSendFailed(_fd, _data);
             }
             free(buf);  //释放内存
@@ -305,7 +310,7 @@ namespace czu {
         return len > 0;
     }
 
-    bool NetBase::send(int _fd, const char *buff, int len) {
+    bool NetBase::send_buffer(int _fd, const char *buff, int len) {
         if (len > 0) {
 //        int ret = send(_fd, buff, len, MSG_NOSIGNAL );
             int ret = write(_fd, buff, len);
