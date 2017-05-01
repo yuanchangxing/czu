@@ -206,7 +206,7 @@ namespace czu {
                                  SOMAXCONN, 10);
 
             for (int i = 0; i < fds; i++) {
-                LOGD("poll loop; events_[i].data.fd:%d; %d",events_[i].data.fd, socket_listenfd_);
+//                LOGD("poll loop; events_[i].data.fd:%d; %d",events_[i].data.fd, socket_listenfd_);
                 if (events_[i].data.fd == this->socket_listenfd_) {
                     int connfd = accept(this->socket_listenfd_,
                                         (struct sockaddr *) &client_addr,

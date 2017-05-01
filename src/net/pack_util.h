@@ -32,7 +32,7 @@ namespace czu{
                 return -1;
             }
             if(_length<PackBase::pack_head_length_){
-                LOGD("not enough for a whole pack.");
+//                LOGD("not enough for a whole pack.");
                 return 0;
             }
             _pack.cmd_ = read_int32(buffer);
@@ -46,7 +46,7 @@ namespace czu{
                 _pack.body = pbody ;
                 return (int) (buffer-_ptr +_pack.length_ );
             } else{
-                LOGD("not enough buffer, continue read.length_:%d; (buffer-_ptr)+_pack.length_ :%d", _pack.length_, (buffer-_ptr)+_pack.length_ );
+//                LOGD("not enough buffer, continue read.length_:%d; (buffer-_ptr)+_pack.length_ :%d", _pack.length_, (buffer-_ptr)+_pack.length_ );
                 return 0;
             }
 
@@ -57,17 +57,14 @@ namespace czu{
             int total_len = PackBase::pack_head_length_ + _data.length_ ;
             _buffer_ptr = (char*)malloc(total_len* sizeof(char));
             char *ptr = _buffer_ptr ;
-            write_int32(ptr, _data.headflag_);
+            write_int32(ptr,_data.headflag_);
             write_int32(ptr,_data.cmd_);
-            LOGD("seq:%d, ptr:%p", _data.sequence_,ptr);
             write_int32(ptr,_data.sequence_);
-            LOGD("userid_:%d, ptr:%p, ", _data.userid_, ptr );
-
             write_int32(ptr,_data.userid_);
             write_int32(ptr,_data.reserved_);
             write_int32(ptr,_data.length_);
             write_array(ptr,_data.body.get(), _data.length_);
-
+            free(_buffer_ptr);
 
             return total_len;
         }
