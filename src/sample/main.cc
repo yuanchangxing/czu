@@ -5,20 +5,57 @@
 
 #include <stdio.h>
 #include <Python.h>
+#include <iostream>
 
 using namespace czu;
 
 
-//调用输出"Hello World"函数
+//python integrate sample.
 void callpy() {
     Py_Initialize();              //使用python之前，要调用Py_Initialize();这个函数进行初始化
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append('./entry')");
-    PyObject * pModule = NULL;    //声明变量
-    PyObject * pFunc = NULL;      //声明变量
-    pModule =PyImport_ImportModule("main");              //这里是要调用的Python文件名
-    pFunc= PyObject_GetAttrString(pModule, "entry_py");   //这里是要调用的函数名
-    PyEval_CallObject(pFunc, NULL);                         //调用函数,NULL表示参数为空
+    PyObject * ptr_module = NULL;    //声明变量
+    PyObject * ptr_func = NULL;      //声明变量
+    PyObject * ptr_parameters = NULL;
+    PyObject * ptr_result = NULL;
+    const char* ptr_buffer = NULL;
+    int value = 0;
+//    pParam = Py_BuildValue("(s)", "hi this is buffer");
+    ptr_parameters = PyTuple_New(7);
+    PyTuple_SetItem(ptr_parameters, 0, Py_BuildValue("i", 7777777));
+    PyTuple_SetItem(ptr_parameters, 1, Py_BuildValue("i", 1));
+    PyTuple_SetItem(ptr_parameters, 2, Py_BuildValue("i", 2));
+    PyTuple_SetItem(ptr_parameters, 3, Py_BuildValue("i", 3));
+    PyTuple_SetItem(ptr_parameters, 4, Py_BuildValue("i", 4));
+    PyTuple_SetItem(ptr_parameters, 5, Py_BuildValue("i", 5));
+
+    PyTuple_SetItem(ptr_parameters, 6, Py_BuildValue("s", "hi this is buffer"));
+
+
+
+
+
+
+    ptr_module =PyImport_ImportModule("main");              //这里是要调用的Python文件名
+    ptr_func= PyObject_GetAttrString(ptr_module, "entry_py");   //这里是要调用的函数名
+    ptr_result = PyEval_CallObject(ptr_func, ptr_parameters);                         //
+    if(ptr_result) {
+        if(PyArg_ParseTuple(ptr_result, "is",  &value, &ptr_buffer)) {
+            LOGD("value:%d, buffer:%s", value, ptr_buffer);
+//            std::cout <<"value:"<<value<<"ptr_buffer:"<< ptr_buffer << std::endl;
+        } else{
+            LOGE("parse error");
+        }
+    } else{
+        LOGE("python return value ",ptr_result);
+    }
+    Py_DECREF(ptr_module);
+    Py_DECREF(ptr_func);
+    Py_DECREF(ptr_parameters);
+    Py_DECREF(ptr_result);
+
+
     Py_Finalize();                //调用Py_Finalize,这个和Py_Initialize相对应的.
 }
 
