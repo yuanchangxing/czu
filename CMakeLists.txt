@@ -25,7 +25,12 @@ else()
 endif()
 
 set( CMAKE_BUILD_TYPE Debug )
-find_package(PythonLibs REQUIRED)
+#find_package(PythonLibs 2.7.12 EXACT REQUIRED)
+find_package(PythonLibs  REQUIRED)
+
+
+
+
 include_directories(${PYTHON_INCLUDE_DIRS})
 
 
