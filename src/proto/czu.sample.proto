@@ -1,0 +1,22 @@
+
+
+enum DeviceType{
+  DeviceType_IOS = 1;
+  DeviceType_Android = 2;
+}
+
+message SampleReq{
+  optional string text_field = 1;
+  optional int32 id = 2;
+  optional DeviceType device_type = 3;
+}
+
+
+message SampleReq_Ack{
+
+}
+
+
+message SamplePushNotify{
+  optional int32 timestamp = 1;
+}
