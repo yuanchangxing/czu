@@ -2,6 +2,8 @@
 
 #include "../net/net_base.h"
 
+#include "inotify.h"
+
 #include <Python.h>
 
 using namespace czu;
@@ -68,6 +70,9 @@ Server server ;
 
 int main(int argc, char **argv)
 {
+
+    monitor_py();
+
     LOGD("dir:%s", argv[0]);
 	/* code */
     LOGD("LOGD hello world, %ld",  sizeof(czu::PackBase));
