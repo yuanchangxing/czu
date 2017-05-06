@@ -2,7 +2,7 @@
 #ifndef _CZU_H_NET_BUFFER_READER_H_
 #define _CZU_H_NET_BUFFER_READER_H_
 
-#include <zconf.h>
+//#include <zconf.h>
 #include <arpa/inet.h>
 #include <string.h>
 
