@@ -285,7 +285,7 @@ namespace czu {
     }
 
 
-    int NetBase::start_server(std::string _ip, short _port) {
+    int NetBase::start_server(std::string _ip, int _port) {
         ip_ = _ip;
         port_ = _port;
         start_poll(this->ip_.c_str(), this->port_);

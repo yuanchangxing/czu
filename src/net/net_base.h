@@ -52,7 +52,7 @@ namespace czu {
 
         virtual void OnTimeOut() {}
 
-        int start_server(std::string _ip, short _port = default_port);
+        int start_server(std::string _ip, int _port = default_port);
 
         bool send_pack(int _fd, PackBase &_data);
 
