@@ -4,6 +4,8 @@
 
 #include "pyc_server.h"
 #include <thread>
+#include <sys/inotify.h>
+
 
 using namespace std;
 
@@ -12,7 +14,6 @@ namespace czu {
     PycServer::~PycServer() {
         py_release();
     }
-
 
 
     int PycServer::py_load() {
@@ -34,8 +35,6 @@ namespace czu {
     }
 
 
-
-
     void PycServer::py_release() {
         Py_DECREF(ptr_module_);                                          //clean up.
         ptr_module_ = nullptr;
@@ -48,13 +47,46 @@ namespace czu {
     }
 
 
-
-
     void PycServer::py_monitor() {
-        py_load();
+
+        int fd = inotify_init();
+        int wd = inotify_add_watch(fd, py_path_.c_str(),
+                                   IN_CREATE | IN_DELETE | IN_MOVED_FROM | IN_MOVED_TO | IN_MODIFY);
+
+        if (wd < 0)
+            perror("inotify_add_watch");
+
+        int buffer_len = 1024;
+        char buffer[1024] = {'\0'};
+        int event_size = sizeof(struct inotify_event);
+
+        while (true) {
+            int i = 0;
+
+            ssize_t len = read(fd, buffer, buffer_len);
+            if (len < 0) {
+                LOGE("inotify read error");
+                break;
+            }
+            LOGD("inotify:%s", buffer);
+            while (i < buffer_len) {
+                struct inotify_event *event = (struct inotify_event *) &buffer[i];
+
+                if (event->len) {
+                    if (event->mask & IN_CREATE || event->mask & IN_DELETE || event->mask & IN_MOVED_FROM ||
+                        event->mask & IN_MOVED_TO || event->mask & IN_MODIFY) {
+                        LOGI("inotify found event for file system change. reload python.");
+                        py_load();
+                    }
+                }
+                i += event_size + event->len;
+            }
+
+        }
+        int ret = inotify_rm_watch(fd, wd);
+        close(fd);
+
     }
-
-
 
 
     void PycServer::py_execute() {
@@ -83,16 +115,14 @@ namespace czu {
             LOGE("python return value ", ptr_result);
         }
 
-        if(ptr_parameters!= nullptr){
+        if (ptr_parameters != nullptr) {
             Py_DECREF(ptr_parameters);
         }
-        if(ptr_result!= nullptr){
+        if (ptr_result != nullptr) {
             Py_DECREF(ptr_result);
         }
 
     }
-
-
 
 
     int PycServer::start_server(const char *_ip, const int _port, const char *_py_path, const char *_py_module,
@@ -104,6 +134,8 @@ namespace czu {
         port_ = _port;
 
         py_load();
+        py_execute();
+
 
         NetBase::start_server(ip_, port_);
 
@@ -112,8 +144,6 @@ namespace czu {
 
 
     }
-
-
 
 
     void PycServer::OnRecv(int _sockid, PackBase &_pack) {

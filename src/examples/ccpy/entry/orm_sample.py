@@ -28,14 +28,14 @@ def orm_entry():
     ses = Session()
 
     ses.add_all(
-        [Car(Id=1, Name='Audi', Price=52642),
-         Car(Id=2, Name='Mercedes', Price=57127),
-         Car(Id=3, Name='Skoda', Price=9000),
-         Car(Id=4, Name='Volvo', Price=29000),
-         Car(Id=5, Name='Bentley', Price=350000),
-         Car(Id=6, Name='Citroen', Price=21000),
-         Car(Id=7, Name='Hummer', Price=41400),
-         Car(Id=8, Name='Volkswagen', Price=21600)])
+        [Car( Name='Audi', Price=52642),
+         Car( Name='Mercedes', Price=57127),
+         Car( Name='Skoda', Price=9000),
+         Car( Name='Volvo', Price=29000),
+         Car( Name='Bentley', Price=350000),
+         Car( Name='Citroen', Price=21000),
+         Car( Name='Hummer', Price=41400),
+         Car( Name='Volkswagen', Price=21600)])
     ses.commit()
 
     rs = ses.query(Car).all()

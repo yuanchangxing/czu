@@ -22,7 +22,6 @@ namespace czu {
         int start_server(const char *_ip, const int _port, const char *_py_path, const char *_py_module,
                          const char *_py_func);
 
-        void OnRecv(int _sockid, PackBase &_pack);
 
     private:
         int py_load();
@@ -32,6 +31,8 @@ namespace czu {
         void py_release();
 
         void py_execute();
+
+        void OnRecv(int _sockid, PackBase &_pack);
 
 
     private:
