@@ -9,13 +9,15 @@
 #include "net_base.h"
 #include <string>
 #include <Python.h>
+#include "ThreadPool.h"
+#include <mutex>
 
 namespace czu {
 
     class PycServer : public NetBase {
 
     public:
-        PycServer() {}
+        PycServer() : threadpool_(5) {}
 
         virtual ~PycServer();
 
@@ -25,6 +27,7 @@ namespace czu {
 
     private:
         int py_load();
+
         //monitor for python file.
         void py_monitor();
 
@@ -32,19 +35,21 @@ namespace czu {
 
         void py_execute();
 
-        void OnRecv(int _sockid, PackBase &_pack);
+        void OnRecv(int _sock_id, PackBase &_pack);
 
 
     private:
-        PyObject * ptr_module_ = nullptr;                                   //module for py. file name.
-        PyObject * ptr_func_ = nullptr;                                     //function name for py.
+        PyObject *ptr_module_ = nullptr;                                   //module for py. file name.
+        PyObject *ptr_func_ = nullptr;                                     //function name for py.
 
         std::string py_path_;
         std::string py_module_;
-        std::string py_func_ ;
+        std::string py_func_;
 
         std::string ip_;
         int port_;
+        ThreadPool threadpool_;
+        std::mutex mtx_py_ ;
 
     };
 }

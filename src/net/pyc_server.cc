@@ -17,6 +17,7 @@ namespace czu {
 
 
     int PycServer::py_load() {
+        lock_guard<mutex> lck(mtx_py_);
 
         if (ptr_module_ != nullptr) {
             py_release();
@@ -29,8 +30,8 @@ namespace czu {
         string append_path = path_str;
         PyRun_SimpleString(append_path.c_str());
 
-        ptr_module_ = PyImport_ImportModule("main");                      //python module file name.
-        ptr_func_ = PyObject_GetAttrString(ptr_module_, "entry_py");       //python function name.
+        ptr_module_ = PyImport_ImportModule(py_module_.c_str());                      //python module file name.
+        ptr_func_ = PyObject_GetAttrString(ptr_module_, py_func_.c_str());       //python function name.
 
     }
 
@@ -146,7 +147,7 @@ namespace czu {
     }
 
 
-    void PycServer::OnRecv(int _sockid, PackBase &_pack) {
+    void PycServer::OnRecv(int _sock_id, PackBase &_pack) {
         py_execute();
     }
 
