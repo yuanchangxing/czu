@@ -12,7 +12,7 @@ void monitor_py(){
         perror ("inotify_add_watch");
 
     int buffer_len = 1024;
-    char buffer[buffer_len] = {'\0'};
+    char buffer[1024] = {'\0'};
     int event_size = sizeof(struct inotify_event);
 
     while (true){

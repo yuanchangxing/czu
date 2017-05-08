@@ -9,19 +9,59 @@ using namespace std;
 
 namespace czu {
 
-    int PycServer::load_py() {
+    PycServer::~PycServer() {
+        py_release();
+    }
+
+
+
+    int PycServer::py_load() {
+
+        if (ptr_module_ != nullptr) {
+            py_release();
+        }
 
         Py_Initialize();                                                //py parser init.
         PyRun_SimpleString("import sys");
         char path_str[512] = {'\0'};
-        sprintf(path_str,"sys.path.append('%s')", py_path_.c_str());
-        string append_path = path_str ;
+        sprintf(path_str, "sys.path.append('%s')", py_path_.c_str());
+        string append_path = path_str;
         PyRun_SimpleString(append_path.c_str());
-        PyObject * ptr_module = NULL;                                   //module for py. file name.
-        PyObject * ptr_func = NULL;                                     //function name for py.
-        PyObject * ptr_parameters = NULL;
-        PyObject * ptr_result = NULL;
-        const char* ptr_buffer = NULL;
+
+        ptr_module_ = PyImport_ImportModule("main");                      //python module file name.
+        ptr_func_ = PyObject_GetAttrString(ptr_module_, "entry_py");       //python function name.
+
+    }
+
+
+
+
+    void PycServer::py_release() {
+        Py_DECREF(ptr_module_);                                          //clean up.
+        ptr_module_ = nullptr;
+        Py_DECREF(ptr_func_);
+        ptr_func_ = nullptr;
+//        Py_DECREF(ptr_parameters);
+//        Py_DECREF(ptr_result);
+
+        Py_Finalize();
+    }
+
+
+
+
+    void PycServer::py_monitor() {
+        py_load();
+    }
+
+
+
+
+    void PycServer::py_execute() {
+
+        PyObject *ptr_parameters = nullptr;
+        PyObject *ptr_result = nullptr;
+        const char *ptr_buffer = nullptr;
         int code = 0;
         ptr_parameters = PyTuple_New(7);
         PyTuple_SetItem(ptr_parameters, 0, Py_BuildValue("i", 7777777));
@@ -32,35 +72,27 @@ namespace czu {
         PyTuple_SetItem(ptr_parameters, 5, Py_BuildValue("i", 5));
         PyTuple_SetItem(ptr_parameters, 6, Py_BuildValue("s", "hi this is buffer"));
 
-
-
-        ptr_module =PyImport_ImportModule("main");                      //python module file name.
-        ptr_func= PyObject_GetAttrString(ptr_module, "entry_py");       //python function name.
-        ptr_result = PyEval_CallObject(ptr_func, ptr_parameters);       //call function.
-        if(ptr_result) {
-            if(PyArg_ParseTuple(ptr_result, "is",  &code, &ptr_buffer)) {
+        ptr_result = PyEval_CallObject(ptr_func_, ptr_parameters);       //call function.
+        if (ptr_result) {
+            if (PyArg_ParseTuple(ptr_result, "is", &code, &ptr_buffer)) {
                 LOGD("code:%d, buffer:%s", code, ptr_buffer);
-            } else{
+            } else {
                 LOGE("parse error");
             }
-        } else{
-            LOGE("python return value ",ptr_result);
+        } else {
+            LOGE("python return value ", ptr_result);
         }
 
+        if(ptr_parameters!= nullptr){
+            Py_DECREF(ptr_parameters);
+        }
+        if(ptr_result!= nullptr){
+            Py_DECREF(ptr_result);
+        }
 
-
-        Py_DECREF(ptr_module);                                          //clean up.
-        Py_DECREF(ptr_func);
-        Py_DECREF(ptr_parameters);
-        Py_DECREF(ptr_result);
-
-        Py_Finalize();
     }
 
-    void PycServer::py_monitor() {
 
-        load_py();
-    }
 
 
     int PycServer::start_server(const char *_ip, const int _port, const char *_py_path, const char *_py_module,
@@ -71,18 +103,21 @@ namespace czu {
         ip_ = _ip;
         port_ = _port;
 
-        load_py();
+        py_load();
 
         NetBase::start_server(ip_, port_);
 
-        std::thread thread_file_monitor(  &PycServer::py_monitor, this );// c11 create a thread to monitor file path.
+        std::thread thread_file_monitor(&PycServer::py_monitor, this);// c11 create a thread to monitor file path.
         thread_file_monitor.detach();
+
 
     }
 
 
-    void PycServer::OnRecv(int _sockid, PackBase &_pack) {
 
+
+    void PycServer::OnRecv(int _sockid, PackBase &_pack) {
+        py_execute();
     }
 
 
