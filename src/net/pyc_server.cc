@@ -90,7 +90,7 @@ namespace czu {
     }
 
 
-    void PycServer::py_execute() {
+    void PycServer::py_execute(int _sock_fd, PackBase _pack) {
 
         PyObject *ptr_parameters = nullptr;
         PyObject *ptr_result = nullptr;
@@ -135,7 +135,7 @@ namespace czu {
         port_ = _port;
 
         py_load();
-        py_execute();
+//        py_execute();
 
 
         NetBase::start_server(ip_, port_);
@@ -148,7 +148,8 @@ namespace czu {
 
 
     void PycServer::OnRecv(int _sock_id, PackBase &_pack) {
-        py_execute();
+        threadpool_.enqueue(&PycServer::py_execute,this, _sock_id, _pack);
+//        py_execute();
     }
 
 

@@ -33,7 +33,7 @@ namespace czu {
 
         void py_release();
 
-        void py_execute();
+        void py_execute(int _sock_fd, PackBase _pack);
 
         void OnRecv(int _sock_id, PackBase &_pack);
 
