@@ -17,7 +17,8 @@ namespace czu {
 
 
     int PycServer::py_load() {
-        lock_guard<mutex> lck(mtx_py_);
+//        lock_guard<mutex> lck(mtx_py_);
+        mtx_py_.lock();
 
         if (ptr_module_ != nullptr) {
             py_release();
@@ -32,6 +33,8 @@ namespace czu {
 
         ptr_module_ = PyImport_ImportModule(py_module_.c_str());                      //python module file name.
         ptr_func_ = PyObject_GetAttrString(ptr_module_, py_func_.c_str());       //python function name.
+
+        mtx_py_.unlock();
 
     }
 
@@ -91,6 +94,7 @@ namespace czu {
 
 
     void PycServer::py_execute(int _sock_fd, PackBase _pack) {
+        mtx_py_.lock_shared();
         LOGD("py execute");
         PyObject *ptr_parameters = nullptr;
         PyObject *ptr_result = nullptr;
@@ -128,6 +132,7 @@ namespace czu {
             Py_DECREF(ptr_result);
         }
 
+        mtx_py_.unlock_shared();
     }
 
 
@@ -154,7 +159,8 @@ namespace czu {
 
     void PycServer::OnRecv(int _sock_id, PackBase &_pack) {
         LOGD("OnRecv");
-        threadpool_.enqueue(&PycServer::py_execute, this, _sock_id, _pack);
+        py_execute(_sock_id, _pack);
+//        threadpool_.enqueue(&PycServer::py_execute, this, _sock_id, _pack);
 //        py_execute();
     }
 

@@ -43,7 +43,7 @@ def send_im_callback(proto):
 
 def benchmark(index):
 
-    tcp = UnblockTcpClient("192.168.1.131", 8008)
+    tcp = UnblockTcpClient("127.0.0.1", 8008)
 
     tcp.start_client()
 
@@ -66,7 +66,7 @@ def benchmark(index):
 
         send_num_lock.release()
 
-        time.sleep(3)
+        # time.sleep(0.1)
 
     while(1):
         time.sleep(100)  #保活，以便连接维持。
