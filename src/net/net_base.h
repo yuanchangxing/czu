@@ -7,6 +7,7 @@
 
 #ifndef _CZU_H_NET_BASE_H_
 #define _CZU_H_NET_BASE_H_
+
 #include "pack_util.h"
 #include "pack_base.h"
 #include <string>
@@ -15,6 +16,7 @@
 #include <unordered_map>
 #include <memory>   //shared_ptr
 #include <mutex>
+
 typedef unsigned char BYTE;
 
 #define default_port 8080
@@ -58,6 +60,8 @@ namespace czu {
 
         bool send_buffer(int _fd, const char *_buff, int _len);
 
+        bool send_proto_buf(int _fd, const char *_proto_buf, int _cmd, int _seq, int _userid, int _length);
+
         virtual void OnSendFailed(int _fd, PackBase &_data) {
             //TODO
             LOGE("OnSendFailed fd:%d\n", _fd);
@@ -88,7 +92,7 @@ namespace czu {
 
         void close_cb(int _listenfd, int _sockfd, struct epoll_event &_ev);
 
-        int read_cb(  int _sockfd, struct epoll_event &_ev);
+        int read_cb(int _sockfd, struct epoll_event &_ev);
 
     protected:
 

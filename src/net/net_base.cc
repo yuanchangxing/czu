@@ -27,20 +27,20 @@ namespace czu {
 
 
     void NetBase::close_cb(int listenfd, int sockfd, struct epoll_event &ev) {
-        LOGD("close_cb") ;
+        LOGD("close_cb");
         close(sockfd);
         recv_buffers_.erase(sockfd);
         OnDisconn(sockfd);
     }
 
-    int NetBase::read_cb( int sock_fd, struct epoll_event &ev) {
+    int NetBase::read_cb(int sock_fd, struct epoll_event &ev) {
 
         bool needs_close = false;
         char sbuf[1024] = {0};
         char *buf = sbuf;
         while (true) {
 
-            int val = (int)read(sock_fd, buf, 1024);
+            int val = (int) read(sock_fd, buf, 1024);
             if (val > 0) {
 
                 PackBase pdu;
@@ -93,7 +93,7 @@ namespace czu {
                 close_cb(socket_listenfd_, sock_fd, ev);
                 return -2;
             } else if (val < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-                LOGI("error is %d; val is %d",errno, val);
+                LOGI("error is %d; val is %d", errno, val);
                 break;
             } else if (errno == EBADF) {
                 if (epoll_ctl(epollfd_, EPOLL_CTL_DEL, sock_fd, &ev) == -1) {
@@ -293,17 +293,23 @@ namespace czu {
 
 
     bool NetBase::send_pack(int _fd, PackBase &_data) {
+        LOGD("33333");
         std::lock_guard<std::mutex> lk1(send_mutex_);
+        LOGD("44444");
         char *buf = NULL;
+        LOGD("555555");
         int len = OnSerializePack(_data, buf);
+        LOGD("666666");
         if (len > 0) {
-            int ret = (int)send(_fd, buf, len, MSG_NOSIGNAL );
+            LOGD("7777777");
+            int ret = (int) send(_fd, buf, len, MSG_NOSIGNAL);
 //            int ret = write(_fd, buf, len);
             if (ret == -1) {
                 char *mesg = strerror(errno);
                 LOGE("SEND ERROR;%s", mesg);
                 OnSendFailed(_fd, _data);
             }
+            LOGD("888888");
             free(buf);  //释放内存
             return ret > 0;
         }
@@ -321,6 +327,20 @@ namespace czu {
             return true;
         }
         return false;
+    }
+
+
+    bool NetBase::send_proto_buf(int _fd, const char *_proto_buf, int _cmd, int _seq, int _userid, int _length) {
+        PackBase pack ;
+        pack.cmd_ = _cmd ;
+        pack.sequence_ = _seq;
+        pack.userid_ = _userid;
+        pack.body = shared_ptr<char>(new char[_length]);
+        pack.length_ = _length;
+        memcpy(pack.body.get(), _proto_buf, _length);
+        LOGD("111111");
+        send_pack(_fd, pack);
+        LOGD("222222");
     }
 
 }

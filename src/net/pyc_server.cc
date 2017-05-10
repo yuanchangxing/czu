@@ -91,7 +91,7 @@ namespace czu {
 
 
     void PycServer::py_execute(int _sock_fd, PackBase _pack) {
-
+        LOGD("py execute");
         PyObject *ptr_parameters = nullptr;
         PyObject *ptr_result = nullptr;
         const char *ptr_buffer = nullptr;
@@ -109,6 +109,11 @@ namespace czu {
         if (ptr_result) {
             if (PyArg_ParseTuple(ptr_result, "is", &code, &ptr_buffer)) {
                 LOGD("code:%d, buffer:%s", code, ptr_buffer);
+                if (!code) {
+                    LOGD("python execute result write back to client.");
+                    send_proto_buf(_sock_fd, "hello world", _pack.cmd_, _pack.sequence_, _pack.userid_,
+                                   strlen("hello world"));
+                }
             } else {
                 LOGE("parse error");
             }
@@ -148,7 +153,8 @@ namespace czu {
 
 
     void PycServer::OnRecv(int _sock_id, PackBase &_pack) {
-        threadpool_.enqueue(&PycServer::py_execute,this, _sock_id, _pack);
+        LOGD("OnRecv");
+        threadpool_.enqueue(&PycServer::py_execute, this, _sock_id, _pack);
 //        py_execute();
     }
 

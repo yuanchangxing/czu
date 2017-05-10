@@ -9,11 +9,11 @@
 using namespace czu;
 
 class Server :public PycServer{
-public:
-    void OnRecv(int _sockid, PackBase &_pack) {
-        LOGD("cmd:%d, length:%d, sequence_:%d, body:%s,", _pack.cmd_, _pack.length_, _pack.sequence_, _pack.body.get());
-        send_pack(_sockid,_pack);
-    }
+//public:
+//    void OnRecv(int _sockid, PackBase &_pack) {
+//        LOGD("cmd:%d, length:%d, sequence_:%d, body:%s,", _pack.cmd_, _pack.length_, _pack.sequence_, _pack.body.get());
+//        send_pack(_sockid,_pack);
+//    }
 };
 
 

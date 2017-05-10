@@ -31,13 +31,10 @@ def get_seq():
     global seqid
     seqid += 1
     seqid_lock.release()
-    # print (seqid,"seqid~~~~~~~~~")
     return seqid
 
 
 def send_im_callback(proto):
-    # print ("===================>")
-    # print (proto)
     recieve_num_lock.acquire() #加锁
     global recieve_num
     recieve_num = recieve_num + 1
@@ -46,7 +43,7 @@ def send_im_callback(proto):
 
 def benchmark(index):
 
-    tcp = UnblockTcpClient("192.168.1.104", 8888)
+    tcp = UnblockTcpClient("192.168.1.131", 8008)
 
     tcp.start_client()
 
@@ -69,16 +66,16 @@ def benchmark(index):
 
         send_num_lock.release()
 
-        # time.sleep(3)
+        time.sleep(3)
 
     while(1):
         time.sleep(100)  #保活，以便连接维持。
 
 
 if __name__ == '__main__':
-    time.sleep(3)
+    time.sleep(1)
 
-    for i in range(0, 50):
+    for i in range(0, 1):
         threading.Thread(target=benchmark, args=(i,), name=str(i)).start()
         time.sleep(0.2)
         #threading.Thread(target=doAdd, args=(), name='thread - ' + str(i)).start()

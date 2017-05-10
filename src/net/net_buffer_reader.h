@@ -59,8 +59,11 @@ namespace czu {
 		}
 
 		inline void write_array(char *&_ptr, const char *_value, const int _length) {
+			LOGD("UUU,%d, %s", _length, _value);
 			memcpy(_ptr, _value, _length );
+			LOGD("YYY");
             _ptr+= _length;
+			LOGD("ZZZ");
 		}
 
 
