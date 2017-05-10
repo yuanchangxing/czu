@@ -1,0 +1,15 @@
+
+import "czu.code.proto";
+package czu.user;
+
+message user_login_req{
+    optional string user_name = 1;
+    optional string pwd = 2;
+}
+
+message user_login_req_ack{
+    optional czu.code.ErrorCode code = 1;
+    optional int32 user = 2 ;
+    optional string user_name = 3;
+    optional string nick_name = 4;
+}

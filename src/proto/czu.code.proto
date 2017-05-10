@@ -1,0 +1,6 @@
+
+package czu.code;
+
+enum ErrorCode{
+    ErrorCode_Ok = 0;
+}
