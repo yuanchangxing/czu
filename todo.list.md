@@ -5,4 +5,6 @@
         https://www.ibm.com/developerworks/cn/linux/l-inotify/
 
 
-# py write to processed message queue, which would send to client (until got a ack for message).
+# how processed msg reply delivery to request source?
+
+    py write to processed message queue, which would send to client (until got a ack for message).
