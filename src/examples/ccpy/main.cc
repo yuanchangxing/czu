@@ -5,6 +5,7 @@
 
 #include "clog.h"
 #include "pyc_server.h"
+#include <chrono>
 
 using namespace czu;
 
@@ -25,7 +26,7 @@ int main(int argc, const char ** argv){
     Server server ;
     server.start_server("0.0.0.0", 8008,"./entry","main", "entry_py");
     while(1){
-        sleep(1000);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
 }

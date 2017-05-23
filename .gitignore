@@ -9,7 +9,7 @@
 *.pch
 
 # Compiled Dynamic libraries
-*.so
+#*.so
 *.dylib
 *.dll
 
@@ -33,3 +33,8 @@ CMakeScripts
 Makefile
 cmake_install.cmake
 install_manifest.txt
+
+
+*.pyc
+
+*~

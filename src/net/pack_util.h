@@ -53,25 +53,25 @@ namespace czu{
         }
 
         virtual int OnSerializePack(PackBase& _data, char *&_buffer_ptr){
-            LOGD("AAA");
+//            LOGD("AAA");
             int total_len = PackBase::pack_head_length_ + _data.length_ ;
-            LOGD("BBB");
+//            LOGD("BBB");
             _buffer_ptr = (char*)malloc(total_len* sizeof(char));
-            LOGD("CCC");
+//            LOGD("CCC");
             char *ptr = _buffer_ptr ;
-            LOGD("DDDD");
+//            LOGD("DDDD");
             write_int32(ptr,_data.headflag_);
-            LOGD("EEE");
+//            LOGD("EEE");
             write_int32(ptr,_data.cmd_);
-            LOGD("FFF");
+//            LOGD("FFF");
             write_int32(ptr,_data.sequence_);
-            LOGD("GGG");
+//            LOGD("GGG");
             write_int32(ptr,_data.userid_);
-            LOGD("HHH");
+//            LOGD("HHH");
             write_int32(ptr,_data.reserved_);
-            LOGD("III");
+//            LOGD("III");
             write_int32(ptr,_data.length_);
-            LOGD("JJJ%d",_data.length_);
+//            LOGD("JJJ%d",_data.length_);
             write_array(ptr,_data.body.get(), _data.length_);
             LOGD("KKK");
 //            free(_buffer_ptr);

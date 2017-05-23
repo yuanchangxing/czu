@@ -293,15 +293,15 @@ namespace czu {
 
 
     bool NetBase::send_pack(int _fd, PackBase &_data) {
-        LOGD("33333");
+//        LOGD("33333");
         std::lock_guard<std::mutex> lk1(send_mutex_);
-        LOGD("44444");
+//        LOGD("44444");
         char *buf = NULL;
-        LOGD("555555");
+//        LOGD("555555");
         int len = OnSerializePack(_data, buf);
-        LOGD("666666");
+//        LOGD("666666");
         if (len > 0) {
-            LOGD("7777777");
+//            LOGD("7777777");
             int ret = (int) send(_fd, buf, len, MSG_NOSIGNAL);
 //            int ret = write(_fd, buf, len);
             if (ret == -1) {
@@ -309,7 +309,7 @@ namespace czu {
                 LOGE("SEND ERROR;%s", mesg);
                 OnSendFailed(_fd, _data);
             }
-            LOGD("888888");
+//            LOGD("888888");
             free(buf);  //释放内存
             return ret > 0;
         }

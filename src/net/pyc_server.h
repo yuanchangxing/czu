@@ -11,6 +11,7 @@
 #include <Python.h>
 #include "ThreadPool.h"
 #include <mutex>
+#include <shared_mutex>
 
 namespace czu {
 
@@ -49,7 +50,7 @@ namespace czu {
         std::string ip_;
         int port_;
         ThreadPool threadpool_;
-        std::mutex mtx_py_ ;
+        std::shared_timed_mutex  mtx_py_ ;
 
     };
 }
