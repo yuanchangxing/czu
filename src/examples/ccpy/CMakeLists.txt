@@ -29,6 +29,7 @@ endif()
 
 set( CMAKE_BUILD_TYPE Debug )
 #find_package(PythonLibs 2.7.12 EXACT REQUIRED)
+set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs  REQUIRED)
 
 
