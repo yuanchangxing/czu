@@ -154,7 +154,8 @@ namespace czu {
 
     void PycServer::OnRecv(int _sock_id, PackBase &_pack) {
         LOGD("OnRecv");
-        threadpool_.enqueue(&PycServer::py_execute, this, _sock_id, _pack);
+        py_execute(_sock_id,_pack);
+//        threadpool_.enqueue(&PycServer::py_execute, this, _sock_id, _pack);
 //        py_execute();
     }
 
