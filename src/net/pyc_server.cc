@@ -94,7 +94,8 @@ namespace czu {
 
 
     void PycServer::py_execute(int _sock_fd, PackBase _pack) {
-        mtx_py_.lock_shared();
+//        mtx_py_.lock_shared();
+        mtx_py_.lock();
         LOGD("py execute");
         PyObject *ptr_parameters = nullptr;
         PyObject *ptr_result = nullptr;
@@ -132,7 +133,8 @@ namespace czu {
             Py_DECREF(ptr_result);
         }
 
-        mtx_py_.unlock_shared();
+//        mtx_py_.unlock_shared();
+        mtx_py_.unlock();
     }
 
 
