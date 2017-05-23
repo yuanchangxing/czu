@@ -2,7 +2,10 @@
 #songtzu@126.com
 #4.29.2017
 
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 2.8)
+
+message("ccpy begin.")
+
 project(ccpy)
 
 #set(CMAKE_BINARY_DIR ${PROJECT_SOURCE_DIR}/src/sample)
@@ -29,6 +32,7 @@ set( CMAKE_BUILD_TYPE Debug )
 find_package(PythonLibs  REQUIRED)
 
 
+#add_subdirectory(../../tools/send_msg_queue)
 
 
 include_directories(${PYTHON_INCLUDE_DIRS})
@@ -70,4 +74,6 @@ ADD_EXECUTABLE(ccpy ${DIR_SRCS} ${proto_src} ${sample} ${tools} ${threadpool} ${
 
 TARGET_LINK_LIBRARIES(ccpy protobuf -lpthread ${PYTHON_LIBRARIES} )
 
+
+message("ccpy is finished.")
 #add_executable(czu ${SOURCE_FILES} src/tools/clog.h)

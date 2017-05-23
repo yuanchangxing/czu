@@ -2,71 +2,11 @@
 #songtzu@126.com
 #4.29.2017
 
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 2.8)
 project(czu)
+message("root project.")
+add_subdirectory(./src/tools/send_msg_queue/)
 
-#set(CMAKE_BINARY_DIR ${PROJECT_SOURCE_DIR}/src/sample)
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/src/sample)
-#set(PROJECT_BINARY_DIR ${PROJECT_SOURCE_DIR}/src/sample)
-
-
-set(CMAKE_CXX_STANDARD 11)
+add_subdirectory(./src/examples/ccpy/)
 
 
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
-elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-endif()
-
-set( CMAKE_BUILD_TYPE Debug )
-#find_package(PythonLibs 2.7.12 EXACT REQUIRED)
-find_package(PythonLibs  REQUIRED)
-
-
-
-
-include_directories(${PYTHON_INCLUDE_DIRS})
-
-
-INCLUDE_DIRECTORIES("./src/sample/")
-FILE(GLOB sample "./src/sample/*.cc")
-
-# proto define
-FILE(GLOB proto_src "./src/proto/*.proto")
-
-
-
-#tools dir
-INCLUDE_DIRECTORIES("./src/tools/")
-FILE(GLOB tools "./src/tools/*.c*")
-
-#threadpool dir
-INCLUDE_DIRECTORIES("./src/tools/threadpool/")
-FILE(GLOB threadpool "./src/tools/threadpool/*.cc")
-
-#proto
-INCLUDE_DIRECTORIES("../proto")
-FILE(GLOB proto "./src/proto/*.cc")
-
-
-#net
-INCLUDE_DIRECTORIES("./src/net/")
-FILE(GLOB net "./src/net/*.cc")
-
-
-
-LINK_DIRECTORIES("/usr/local/lib/")
-
-AUX_SOURCE_DIRECTORY(. DIR_SRCS)
-
-ADD_EXECUTABLE(czu ${DIR_SRCS} ${proto_src} ${sample} ${tools} ${threadpool} ${proto} ${net} )
-
-TARGET_LINK_LIBRARIES(czu protobuf -lpthread ${PYTHON_LIBRARIES} )
-
-#add_executable(czu ${SOURCE_FILES} src/tools/clog.h)
