@@ -7,7 +7,7 @@
 
 
 extern "C" {
-    msg_enqueue();
+    int msg_enqueue();
 }
 
 
