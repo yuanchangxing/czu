@@ -73,7 +73,7 @@ namespace czu{
             write_int32(ptr,_data.length_);
 //            LOGD("JJJ%d",_data.length_);
             write_array(ptr,_data.body.get(), _data.length_);
-            LOGD("KKK");
+//            LOGD("KKK");
 //            free(_buffer_ptr);
 
             return total_len;
