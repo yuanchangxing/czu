@@ -55,6 +55,11 @@ FILE(GLOB tools "../../tools/*.c*")
 INCLUDE_DIRECTORIES("../../tools/threadpool/")
 FILE(GLOB threadpool "../../tools/threadpool/*.cc")
 
+#send msg queue dir
+INCLUDE_DIRECTORIES("../../tools/send_msg_queue/")
+FILE(GLOB queue "../../tools/send_msg_queue/*.cc")
+
+
 #proto
 INCLUDE_DIRECTORIES("../../../proto")
 INCLUDE_DIRECTORIES("../../proto")
@@ -71,7 +76,7 @@ LINK_DIRECTORIES("/usr/local/lib/")
 
 AUX_SOURCE_DIRECTORY(. DIR_SRCS)
 
-ADD_EXECUTABLE(ccpy ${DIR_SRCS} ${proto_src} ${sample} ${tools} ${threadpool} ${proto} ${net} )
+ADD_EXECUTABLE(ccpy ${DIR_SRCS} ${proto_src} ${sample} ${tools} ${threadpool} ${proto} ${net} ${queue} )
 
 TARGET_LINK_LIBRARIES(ccpy protobuf -lpthread ${PYTHON_LIBRARIES} )
 

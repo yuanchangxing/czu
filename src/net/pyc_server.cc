@@ -1,7 +1,7 @@
 //
 // Created by songtzu on 5/6/17.
 //
-
+#include "send_msg_queue.h"
 #include "pyc_server.h"
 #include <thread>
 #include <sys/inotify.h>
@@ -97,6 +97,7 @@ namespace czu {
 //        mtx_py_.lock_shared();
         mtx_py_.lock();
         LOGD("py execute");
+
         PyObject *ptr_parameters = nullptr;
         PyObject *ptr_result = nullptr;
         const char *ptr_buffer = nullptr;
@@ -146,6 +147,7 @@ namespace czu {
         ip_ = _ip;
         port_ = _port;
 
+        start_send_task();
         py_load();
 //        py_execute();
 
