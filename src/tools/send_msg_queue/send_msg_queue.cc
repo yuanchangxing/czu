@@ -35,6 +35,7 @@ int msg_enqueue(std::string _msg){
 int start_send_task(){
     std::thread worker(task_worker);
     worker.detach();
+    return 0;
 }
 
 int task_worker() {
@@ -50,4 +51,10 @@ int task_worker() {
         }
 
     }
+}
+
+
+const char * test(char *str){
+    cout << "hello" <<",this from cpp greeting, " << str <<endl;
+    return "hello from c++";
 }
