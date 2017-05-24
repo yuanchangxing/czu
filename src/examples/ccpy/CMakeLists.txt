@@ -57,7 +57,7 @@ FILE(GLOB threadpool "../../tools/threadpool/*.cc")
 
 #send msg queue dir
 INCLUDE_DIRECTORIES("../../tools/send_msg_queue/")
-FILE(GLOB queue "../../tools/send_msg_queue/*.cc")
+#FILE(GLOB queue "../../tools/send_msg_queue/*.cc")
 
 
 #proto
@@ -76,9 +76,9 @@ LINK_DIRECTORIES("/usr/local/lib/")
 
 AUX_SOURCE_DIRECTORY(. DIR_SRCS)
 
-ADD_EXECUTABLE(ccpy ${DIR_SRCS} ${proto_src} ${sample} ${tools} ${threadpool} ${proto} ${net} ${queue} )
+ADD_EXECUTABLE(ccpy ${DIR_SRCS} ${proto_src} ${sample} ${tools} ${threadpool} ${proto} ${net} )
 
-TARGET_LINK_LIBRARIES(ccpy protobuf -lpthread ${PYTHON_LIBRARIES} )
+TARGET_LINK_LIBRARIES(ccpy protobuf -lpthread ${PYTHON_LIBRARIES} send_msg_queue)
 
 
 message("ccpy is finished.")

@@ -13,6 +13,8 @@ lib = cdll.LoadLibrary('../../tools/send_msg_queue/libsend_msg_queue.so')
 #
 #
 def msg_enqueue():
-    lib.test.restype = ctypes.c_char_p
-    ret = lib.test(ctypes.c_char_p(b'hello from python'))
-    print (str(ret))
+    # lib.msg_enqueue.restype = ctypes.c_char_p
+    print ("enqueue start")
+    ret = lib.msg_enqueue(ctypes.c_char_p(b'hello from python'))
+    print ("enqueue over")
+    # print (str(ret))

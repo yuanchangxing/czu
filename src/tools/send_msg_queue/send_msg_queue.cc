@@ -20,13 +20,13 @@ condition_variable condition;
 int task_worker();
 
 
-int msg_enqueue(std::string _msg){
+int msg_enqueue(char * _msg){
 
     {
         std::unique_lock<mutex> lock(queue_mutex);
         cout <<"msg enqueue" << _msg <<endl;
         // don't allow enqueueing after stopping the pool
-        msg_queue.push(_msg);
+        msg_queue.push(string(_msg));
     }
     condition.notify_one();
     return 0;
