@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="send_msg_queue"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\src\;CMake Files\src\examples\;CMake Files\src\examples\ccpy\;CMake Files\src\tools\;CMake Files\src\tools\send_msg_queue\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/jack/Desktop/czu/src/tools/send_msg_queue"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="send_msg_queue">
+				<Option output="/home/jack/Desktop/czu/src/tools/send_msg_queue/libsend_msg_queue.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jack/Desktop/czu/src/tools/send_msg_queue"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/jack/Desktop/czu/src/tools/send_msg_queue/."/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 send_msg_queue"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="send_msg_queue/fast">
+				<Option output="/home/jack/Desktop/czu/src/tools/send_msg_queue/libsend_msg_queue.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jack/Desktop/czu/src/tools/send_msg_queue"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/jack/Desktop/czu/src/tools/send_msg_queue/."/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 send_msg_queue/fast"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/jack/Desktop/czu/src/tools/send_msg_queue/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/jack/Desktop/czu/src/tools/send_msg_queue/send_msg_queue.cc">
+			<Option target="send_msg_queue"/>
+		</Unit>
+		<Unit filename="/home/jack/Desktop/czu/src/tools/send_msg_queue/send_msg_queue.h">
+			<Option target="send_msg_queue"/>
+		</Unit>
+		<Unit filename="/home/jack/Desktop/czu/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/jack/Desktop/czu/src/examples/ccpy/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\examples\ccpy\"/>
+		</Unit>
+		<Unit filename="/home/jack/Desktop/czu/src/examples/ccpy/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\examples\ccpy\"/>
+		</Unit>
+		<Unit filename="/home/jack/Desktop/czu/src/tools/send_msg_queue/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\tools\send_msg_queue\"/>
+		</Unit>
+		<Unit filename="/home/jack/Desktop/czu/src/tools/send_msg_queue/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\tools\send_msg_queue\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
