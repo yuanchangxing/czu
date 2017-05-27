@@ -66,7 +66,8 @@ def benchmark(index):
 
         send_num_lock.release()
 
-        # time.sleep(0.1)
+        time.sleep(0.1)
+
 
     while(1):
         time.sleep(100)  #保活，以便连接维持。
@@ -75,7 +76,7 @@ def benchmark(index):
 if __name__ == '__main__':
     time.sleep(1)
 
-    for i in range(0, 1):
+    for i in range(0, 10):
         threading.Thread(target=benchmark, args=(i,), name=str(i)).start()
         time.sleep(0.2)
         #threading.Thread(target=doAdd, args=(), name='thread - ' + str(i)).start()

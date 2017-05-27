@@ -38,3 +38,5 @@ install_manifest.txt
 *.pyc
 
 *~
+
+*.cbp

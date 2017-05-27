@@ -1,7 +1,7 @@
 //
 // Created by songtzu on 5/6/17.
 //
-
+#include "send_msg_queue.h"
 #include "pyc_server.h"
 #include <thread>
 #include <sys/inotify.h>
@@ -94,8 +94,10 @@ namespace czu {
 
 
     void PycServer::py_execute(int _sock_fd, PackBase _pack) {
-        mtx_py_.lock_shared();
+//        mtx_py_.lock_shared();
+        mtx_py_.lock();
         LOGD("py execute");
+
         PyObject *ptr_parameters = nullptr;
         PyObject *ptr_result = nullptr;
         const char *ptr_buffer = nullptr;
@@ -132,7 +134,8 @@ namespace czu {
             Py_DECREF(ptr_result);
         }
 
-        mtx_py_.unlock_shared();
+//        mtx_py_.unlock_shared();
+        mtx_py_.unlock();
     }
 
 
@@ -144,6 +147,7 @@ namespace czu {
         ip_ = _ip;
         port_ = _port;
 
+        start_send_task();
         py_load();
 //        py_execute();
 
@@ -159,7 +163,7 @@ namespace czu {
 
     void PycServer::OnRecv(int _sock_id, PackBase &_pack) {
         LOGD("OnRecv");
-        py_execute(_sock_id, _pack);
+        py_execute(_sock_id,_pack);
 //        threadpool_.enqueue(&PycServer::py_execute, this, _sock_id, _pack);
 //        py_execute();
     }

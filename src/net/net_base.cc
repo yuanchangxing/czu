@@ -338,9 +338,9 @@ namespace czu {
         pack.body = shared_ptr<char>(new char[_length]);
         pack.length_ = _length;
         memcpy(pack.body.get(), _proto_buf, _length);
-        LOGD("111111");
+//        LOGD("111111");
         send_pack(_fd, pack);
-        LOGD("222222");
+//        LOGD("222222");
     }
 
 }
